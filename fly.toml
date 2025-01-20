@@ -1,0 +1,17 @@
+app = "n8n-traefik-app"
+
+[[services]]
+  internal_port = 80
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls"]
+    port = 443
+
+[[mounts]]
+  source = "n8n_data"
+  destination = "/data"

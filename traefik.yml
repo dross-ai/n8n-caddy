@@ -1,0 +1,28 @@
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: ${SSL_EMAIL}
+      storage: /letsencrypt/acme.json
+      tlsChallenge: {}
+
+http:
+  routers:
+    n8n:
+      rule: "Host(`${DOMAIN_NAME}`)"
+      entryPoints:
+        - websecure
+      service: n8n
+      tls:
+        certResolver: myresolver
+
+  services:
+    n8n:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:5678"
