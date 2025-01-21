@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  n8n-caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      TZ: Asia/Tokyo
+      SSL_EMAIL: example@example.com
+      DOMAIN_NAME: localhost
+    volumes:
+      - ./Procfile:/app/Procfile
+    ports:
+      - "80:80"
+      - "443:443"
+      - "5678:5678"

@@ -1,2 +1,2 @@
-web: /usr/local/bin/traefik --configFile=/etc/traefik/traefik.yml
-worker: n8n
+caddy: caddy run --config /etc/caddy/Caddyfile
+n8n: n8n

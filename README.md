@@ -1,51 +1,34 @@
-# Dockerfile の説明
+# Caddy + n8n セットアップ
 
-このリポジトリには、n8n と Traefik を Fly.io 上で動作させるための Dockerfile が含まれています。Procfile を利用して複数プロセスを簡潔に管理します。
+このリポジトリは、Caddyを使ったn8nのリバースプロキシ設定を簡単に導入するためのガイドです。
 
-## 主な特徴
-- **n8n**: ローコードでワークフローの自動化が可能なツール。
-- **Traefik**: リバースプロキシとロードバランサ。
-- **Procfile**: 複数プロセスを管理。
-- **Overmind**: Procfile マネージャ。
-- 最新バージョンの Traefik (v3.3.2) と Overmind (v2.5.1) を利用。
-- Node.js v22.13.0 に対応。
+## 概要
+Caddyは、シンプルで設定が容易なリバースプロキシサーバーです。本構成では、n8nをCaddyのリバースプロキシを通じて公開し、環境変数を使用して柔軟にホスト名を設定できるようにしています。
 
 ## 使用方法
+### 1. リポジトリをクローン
+以下のコマンドでリポジトリをローカルに取得します。
+```bash
+git clone <repository-url>
+cd <repository-folder>
+```
 
-1. **リポジトリのクローン**
-   ```bash
-   git clone <リポジトリURL>
-   cd <リポジトリ名>
-   ```
+### 2. サービスをビルドおよび起動
+Docker Composeを使用してサービスをビルドし、起動します。
+```bash
+docker-compose up --build
+```
 
-2. **Docker イメージのビルド**
-   ```bash
-   docker build -t n8n-traefik .
-   ```
-
-3. **Fly.io でのデプロイ**
-   事前に Fly.io CLI を設定してください。
-   ```bash
-   fly launch
-   fly deploy
-   ```
-
-## 環境変数
-
-以下の環境変数を使用します:
-- `OVERMIND_VERSION` (デフォルト: `2.5.1`): Overmind のバージョン指定。
-- `TRAEFIK_VERSION` (デフォルト: `3.3.2`): Traefik のバージョン指定。
-- `NODE_VERSION` (デフォルト: `22.13.0`): Node.js のバージョン指定。
-
-## ファイル構成
-- `Dockerfile`: イメージのビルド設定。
-- `traefik.yml`: Traefik の設定ファイル。
-- `Procfile`: プロセス管理設定。
+### 3. 環境変数の設定
+以下の環境変数を適宜設定してください:
+- **`TZ`**: タイムゾーン (例: `Asia/Tokyo`)
+- **`SSL_EMAIL`**: Let's Encryptの通知用メールアドレス
+- **`DOMAIN_NAME`**: 使用するドメイン名 (例: `example.com`)
 
 ## 注意事項
-- Traefik の証明書ストレージや n8n データは Fly.io のボリュームを利用して永続化してください。
-- Fly.io アカウントと CLI の設定が必要です。
+- 初回起動時にCaddyがLet's EncryptでSSL証明書を取得します。インターネット接続が必要です。
+- `DOMAIN_NAME`には有効なFQDNを設定してください。ローカル開発では`localhost`を使用できます。
 
 ## ライセンス
-このプロジェクトは MIT ライセンスのもと提供されています。
+このプロジェクトは、MITライセンスの下で公開されています。
 
