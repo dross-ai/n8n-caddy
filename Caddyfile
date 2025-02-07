@@ -3,5 +3,9 @@
 }
 
 http://{$DOMAIN_NAME} {
+    redir https://{$DOMAIN_NAME}{uri}
+}
+
+https://{$DOMAIN_NAME} {
     reverse_proxy {$DOMAIN_NAME}:5678
 }
